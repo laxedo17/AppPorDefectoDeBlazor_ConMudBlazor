@@ -1,0 +1,61 @@
+﻿@page "/fetchdata"
+
+<PageTitle>Weather forecast</PageTitle>
+
+@using AppPorDefectoDeBlazor_ConMudBlazor.Data
+@inject WeatherForecastService ForecastService
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <!--Transformacion taboa con MudBlazor sen Components-->
+    <div class="mud-main-content">
+        <div class="mud-container mud-container-maxwidth-lg my-4 pt-4">
+            <div class="mud-table mud-xs-table mud-table-hover mud-elevation-0">
+                <div class="mud-table-container" style=""></div>
+                <!--TABOA INSERTADA-->
+            <table class="mud-table-root">
+                    <thead class="mud-table-head">
+                        <tr class="mud-table-row">
+                            <th scope="col" class="mud-table-cell">
+                                <span class="mud-button-root mud-table-sort-label">Date</span>
+                            </th>
+                            <th scope="col" class="mud-table-cell"><span class="mud-button-root mud-table-sort-label">Temp (C)</span></th>
+                            <th scope="col" class="mud-table-cell"><span class="mud-button-root mud-table-sort-label">Temp (F)</span></th>
+                            <th scope="col" class="mud-table-cell"><span class="mud-button-root mud-table-sort-label">Summary</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="mud-table-body">
+                        @foreach (var forecast in forecasts)
+                        {
+                            <tr class="mud-table-row">
+                                <td data-label="Date" class="mud-table-cell">@forecast.Date.ToShortDateString()</td>
+                                <td data-label="Temp (C)" class="mud-table-cell">@forecast.TemperatureC</td>
+                                <td data-label="Temp (F)" class="mud-table-cell">@forecast.TemperatureF</td>
+                                <td data-label="Summary" class="mud-table-cell">@forecast.Summary</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <!--FIN TABOA INSERTADA-->
+        </div>
+        </div>
+    </div>
+    <!--Fin transformacion taboa con MudBlazor-->
+}
+
+@code {
+    private WeatherForecast[]? forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    }
+}
